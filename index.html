@@ -1,14 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
     <title>Weather API</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
 </head>
+
 <body>
+    <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand">Check the Weather</a>
+        <form class="form-inline">
+            <input class="form-control mr-sm-2" id="user-input" type="search" placeholder="Enter a city"
+                aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </nav>
+    <!-- Retrieved data will be dumped here -->
+    <div class="city"></div>
+    <div class="date1"></div>
+    <div class="date2"></div>
+    <div class="date3"></div>
+    <div class="date4"></div>
+    <div class="date5"></div>
 
 
-    
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        // This is our API key
+        // var APIKey = "166a433c57516f51dfab1f7edaed8413";
+
+        var button = document.querySelector(".btn")
+
+
+        $(button).on("click", function (e) {
+            e.preventDefault()
+            var userInput = document.querySelector("#user-input")
+            var APIKey = "668c520ffe7a49dcb2407ef31b8a3607"; // my key
+            var days = 5;
+            console.log(userInput.value)
+
+            // Here we are building the URL we need to query the database
+            var queryURL =
+                "https://api.weatherbit.io/v2.0/forecast/daily?days=" + days + "&units=I&city=" + userInput.value + "&key=" + APIKey
+
+            console.log(queryURL)
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            })
+                // We store all of the retrieved data inside of an object called "response"
+                .then(function (response) {
+                    handleResponse(response);
+                });
+        })
+
+        function runWeather() {
+            handleResponse();
+
+        }
+
+        function handleResponse(response) {
+            // Log the resulting object
+            console.log(response.city_name);
+            console.log(response.data[0].valid_date);
+            console.log(response.data[0].weather.description);
+            console.log(response.data[0].high_temp);
+            console.log(response.data[0].low_temp);
+            console.log(response.data[0].rh);
+            console.log(response.data[0].wind_spd);
+            // Transfer Dates to HTML
+            $(".city").html("<h1>" + response.city_name + " Weather Details" + "</h1>");
+            $(".date1").html("<h3>" + "Date: " + response.data[0].valid_date + "</h3>");
+            $(".date2").html("<h3>" + "Date: " + response.data[1].valid_date + "</h3>");
+            $(".date3").html("<h3>" + "Date: " + response.data[2].valid_date + "</h3>");
+            $(".date4").html("<h3>" + "Date: " + response.data[3].valid_date + "</h3>");
+            $(".date5").html("<h3>" + "Date: " + response.data[4].valid_date + "</h3>");
+
+            // Day 1
+            $(".date1").append("<div>" + "High Temp: " + response.data[0].high_temp + " F"+ "</div>");
+            $(".date1").append("<div>" + "Low Temp: " + response.data[0].low_temp + " F"+ "</div>");
+            $(".date1").append("<div>" + "Weather Conditions : " + response.data[0].weather.description + "</div>");
+            $(".date1").append("<div>" + "Humidity: " + response.data[0].rh + "%" + "</div>");
+            $(".date1").append("<div>" + "Wind Speed: " + response.data[0].wind_spd + "MPH" + "</div>");
+
+            // Day 2
+            $(".date2").append("<div>" + "High Temp: " + response.data[1].high_temp + " F"+ "</div>");
+            $(".date2").append("<div>" + "Low Temp: " + response.data[1].low_temp + " F"+ "</div>");
+            $(".date2").append("<div>" + "Weather Conditions : " + response.data[1].weather.description + "</div>");
+            $(".date2").append("<div>" + "Humidity: " + response.data[1].rh + "%" + "</div>");
+            $(".date2").append("<div>" + "Wind Speed: " + response.data[1].wind_spd + "MPH" + "</div>");
+
+            // Day 3
+            $(".date3").append("<div>" + "High Temp: " + response.data[2].high_temp + " F"+ "</div>");
+            $(".date3").append("<div>" + "Low Temp: " + response.data[2].low_temp + " F"+ "</div>");
+            $(".date3").append("<div>" + "Weather Conditions : " + response.data[2].weather.description + "</div>");
+            $(".date3").append("<div>" + "Humidity: " + response.data[2].rh + "%" + "</div>");
+            $(".date3").append("<div>" + "Wind Speed: " + response.data[2].wind_spd + "MPH" + "</div>");
+            // Day 4
+            $(".date4").append("<div>" + "High Temp: " + response.data[3].high_temp + " F"+ "</div>");
+            $(".date4").append("<div>" + "Low Temp: " + response.data[3].low_temp + " F"+ "</div>");
+            $(".date4").append("<div>" + "Weather Conditions : " + response.data[3].weather.description + "</div>");
+            $(".date4").append("<div>" + "Humidity: " + response.data[3].rh + "%" + "</div>");
+            $(".date4").append("<div>" + "Wind Speed: " + response.data[3].wind_spd + "MPH" + "</div>");
+            // Day 5
+            $(".date5").append("<div>" + "High Temp: " + response.data[4].high_temp + " F"+ "</div>");
+            $(".date5").append("<div>" + "Low Temp: " + response.data[4].low_temp + " F"+ "</div>");
+            $(".date5").append("<div>" + "Weather Conditions : " + response.data[4].weather.description + "</div>");
+            $(".date5").append("<div>" + "Humidity: " + response.data[4].rh + "%" + "</div>");
+            $(".date5").append("<div>" + "Wind Speed: " + response.data[4].wind_spd + "MPH" + "</div>");
+
+
+
+
+
+        }
+    </script>
 </body>
+
 </html>
